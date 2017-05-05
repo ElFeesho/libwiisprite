@@ -27,3 +27,10 @@
 *.exe
 *.out
 *.app
+build/
+
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+.idea
+*.iml
