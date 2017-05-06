@@ -2,74 +2,79 @@
  * libwiisprite - LayerManager
  */
 
-#ifndef LIBWIISPRITE_LAYERMANAGER
-#define LIBWIISPRITE_LAYERMANAGER
+#pragma once
 
 #include <stdlib.h>
 #include <gccore.h>
 #include "layer.h"
 
 //!libwiisprite namespace
-namespace wsp{
-	//!Groups layers into one block in which they can be managed.
-	class LayerManager{
-		public:
-			//!Constructor.
-			//!\param boundary Specifies how many layers can be grouped into this manager.
-			LayerManager(u32 boundary);
-			//!Destructor.
-			virtual ~LayerManager();
+namespace wsp {
+    //!Groups layers into one block in which they can be managed.
+    class LayerManager {
+    public:
+        //!Constructor.
+        //!\param boundary Specifies how many layers can be grouped into this manager.
+        LayerManager(u32 boundary);
 
-			//!Appends a layer at the end, thus drawing it at last.
-			//!\param layer The layer to append. If it is already in the list, it gets removed first.
-			//!\sa \ref layermanager_append_page
-			void Append(Layer* layer);
-			//!Inserts a layer into the manager. 
-			//!\param layer The layer to insert. If it is already in the list, it gets removed first.
-			//!\param index The new index of the layer. Can't be bigger than GetSize().
-			//!\sa \ref layermanager_append_page
-			void Insert(Layer* layer, u32 index);
-			//!Removes a layer from the list.
-			//!\param layer A layer that is in the list.
-			//!\sa \ref layermanager_append_page
-			void Remove(Layer* layer);
-			//!Clears the whole LayerManager from all Layers.
-			//!\sa \ref layermanager_append_page
-			void RemoveAll();
+        //!Destructor.
+        virtual ~LayerManager();
 
-			//!Returns a layer at a specified index.
-			//!\param index The index from where to poll the layer. Can't be bigger than GetSize().
-			//!\return A pointer to the layer at the index. NULL if index is out of bounds.
-			//!\sa \ref layermanager_append_page
-			Layer* GetLayerAt(u32 index) const;
-			//!Returns the size of the list of layers.
-			//!\return The size of the current layerlist.
-			//!\sa \ref layermanager_append_page
-			u32 GetSize() const;
+        //!Appends a layer at the end, thus drawing it at last.
+        //!\param layer The layer to append. If it is already in the list, it gets removed first.
+        //!\sa \ref layermanager_append_page
+        void Append(Layer *layer);
 
-			//!Specifies where to view the current scene.
-			//!\param x The upper left corners X position.
-			//!\param y The upper left corners Y position.
-			//!\param width The width of the window.
-			//!\param height The height of the window.
-			//!\sa \ref layermanager_viewwindows_page
-			void SetViewWindow(s32 x, s32 y, u32 width, u32 height);
-			
-			//!Draws all the layers in this LayerManager.
-			//!\param x The X offset for drawing.
-			//!\param y The Y offset for drawing.
-			//!\sa \ref layermanager_viewwindows_page
-			void Draw(s32 x, s32 y) const;
-		protected:
-			u32 _width, //!< The width of the viewwindow.
-				_height; //!< The height of the viewwindow.
-			s32 _x, //!< The X position of the viewwindow.
-				_y; //!< The Y position of the viewwindow.
-		private:
-			Layer** _layers;
-			u32 _size,
-				_boundary;
-	};
+        //!Inserts a layer into the manager.
+        //!\param layer The layer to insert. If it is already in the list, it gets removed first.
+        //!\param index The new index of the layer. Can't be bigger than GetSize().
+        //!\sa \ref layermanager_append_page
+        void Insert(Layer *layer, u32 index);
+
+        //!Removes a layer from the list.
+        //!\param layer A layer that is in the list.
+        //!\sa \ref layermanager_append_page
+        void Remove(Layer *layer);
+
+        //!Clears the whole LayerManager from all Layers.
+        //!\sa \ref layermanager_append_page
+        void RemoveAll();
+
+        //!Returns a layer at a specified index.
+        //!\param index The index from where to poll the layer. Can't be bigger than GetSize().
+        //!\return A pointer to the layer at the index. NULL if index is out of bounds.
+        //!\sa \ref layermanager_append_page
+        Layer *GetLayerAt(u32 index) const;
+
+        //!Returns the size of the list of layers.
+        //!\return The size of the current layerlist.
+        //!\sa \ref layermanager_append_page
+        u32 GetSize() const;
+
+        //!Specifies where to view the current scene.
+        //!\param x The upper left corners X position.
+        //!\param y The upper left corners Y position.
+        //!\param width The width of the window.
+        //!\param height The height of the window.
+        //!\sa \ref layermanager_viewwindows_page
+        void SetViewWindow(s32 x, s32 y, u32 width, u32 height);
+
+        //!Draws all the layers in this LayerManager.
+        //!\param x The X offset for drawing.
+        //!\param y The Y offset for drawing.
+        //!\sa \ref layermanager_viewwindows_page
+        void Draw(s32 x, s32 y) const;
+
+    protected:
+        u32 _width, //!< The width of the viewwindow.
+                _height; //!< The height of the viewwindow.
+        s32 _x, //!< The X position of the viewwindow.
+                _y; //!< The Y position of the viewwindow.
+    private:
+        Layer **_layers;
+        u32 _size,
+                _boundary;
+    };
 };
 
 /*! \page layermanager_viewwindows_page LayerManager - ViewWindows
@@ -103,5 +108,3 @@ namespace wsp{
  * but a Layer can be in multiple LayerManagers at once. Take this in mind when creating sorting
  * algorithms to use with the library.
  */
-
-#endif

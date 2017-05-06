@@ -2,56 +2,58 @@
  * libwiisprite - GameWindow
  */
 
-#ifndef LIBWIISPRITE_GAMEWINDOW
-#define LIBWIISRPITE_GAMEWINDOW
+#pragma once
 
 #include <stdlib.h>
 #include <gccore.h>
 #include "image.h"
 
 //!libwiisprite namespace
-namespace wsp{
-	//!Basic rendering unit.
-	class GameWindow{
-		public:
-			//!Constructor.
-			GameWindow();
-			//!Destructor. Does call StopVideo() automatically.
-			virtual ~GameWindow();
+namespace wsp {
+    //!Basic rendering unit.
+    class GameWindow {
+    public:
+        //!Constructor.
+        GameWindow();
 
-			//!Initializes the whole video subsystem.
-			//!Should be the first command called with the library.
-			void InitVideo();
-			//!Shuts the video subsystem down. It won't work if Video wasn't initialized before.
-			void StopVideo();
-			//!Checks if the video subsystem is already initialized.
-			//!\return true if initialized, false if not.
-			static bool IsInitialized();
-			//!Sets the background clear color
-			//!\param bgcolor is a GXColor containing r, g, b and a.
-			void SetBackground(GXColor bgcolor);
-			//!Finishes rendering.
-			void Flush();
+        //!Destructor. Does call StopVideo() automatically.
+        virtual ~GameWindow();
 
-			//!Gets the width of the screen.
-			//!\return The width of the screen if intialized. 0 if the video subsystem is not initialized. 
-			static u32 GetWidth();
-			//!Gets the height of the screen.
-			//!\return The height of the screen if intialized. 0 if the video subsystem is not initialized. 
-			static u32 GetHeight();
-		protected:
-		private:
-			void* _frameBuffer[2]; u32 _fb;
-			bool _first;
-			GXRModeObj* _rmode;
-			void* _gp_fifo;
-			static u32 _width, _height;
-			static bool _initialized;
-			static Image* _lastimage;
-			static bool _lastimagebilinear;
+        //!Initializes the whole video subsystem.
+        //!Should be the first command called with the library.
+        void InitVideo();
 
-		friend class Image; // Lets image access the _lastimage and _lastimagebilinear member.
-	};
+        //!Shuts the video subsystem down. It won't work if Video wasn't initialized before.
+        void StopVideo();
+
+        //!Sets the background clear color
+        //!\param bgcolor is a GXColor containing r, g, b and a.
+        void SetBackground(GXColor bgcolor);
+
+        //!Finishes rendering.
+        void Flush();
+
+        //!Gets the width of the screen.
+        //!\return The width of the screen if intialized. 0 if the video subsystem is not initialized.
+        static u32 GetWidth();
+
+        //!Gets the height of the screen.
+        //!\return The height of the screen if intialized. 0 if the video subsystem is not initialized.
+        static u32 GetHeight();
+
+    private:
+        void *_frameBuffer[2];
+        u32 _fb;
+        bool _first;
+        GXRModeObj *_rmode;
+        void *_gp_fifo;
+        static u32 _width, _height;
+        static bool _initialized;
+        static Image *_lastimage;
+        static bool _lastimagebilinear;
+
+        friend class Image; // Lets image access the _lastimage and _lastimagebilinear member.
+    };
 };
 
 /*! \mainpage libwiisprite Documentation
@@ -109,5 +111,3 @@ namespace wsp{
  * The top left is (0;0), the bottom right is (640;480). Of course the positions
  * can also be negative or bigger than said bottom right corner.
  */
-
-#endif

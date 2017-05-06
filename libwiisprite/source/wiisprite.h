@@ -1,9 +1,7 @@
 /*
  * libwiisprite - All headers in one
  */
-
-#ifndef LIBWIISPRITE_WIISPRITE
-#define LIBWIISPRITE_WIISPRITE
+#pragma once
 
 #include "gamewindow.h"
 #include "layermanager.h"
@@ -17,5 +15,3 @@
 #define WSP_POINTER_CORRECTION_X 200
 //!Corrects the Y coordinate for the pointer
 #define WSP_POINTER_CORRECTION_Y 250
-
-#endif

@@ -1,90 +1,96 @@
 /*
  * libwiisprite - Image
  */
-
-#ifndef LIBWIISPRITE_IMAGE
-#define LIBWIISPRITE_IMAGE
+#pragma once
 
 #include <stdlib.h>
 #include <gccore.h>
 #include <png.h>
 
 //!libwiisprite namespace
-namespace wsp{
-	
-	//!Error codes when loading images.
-	enum IMG_LOAD_ERROR{
-		IMG_LOAD_ERROR_NONE = 0, //!< Image successfully loaded.
-		IMG_LOAD_ERROR_NOT_FOUND, //!< File was not found.
-		IMG_LOAD_ERROR_INV_PNG, //!< Invalid PNG header.
-		IMG_LOAD_ERROR_PNG_FAIL, //!< Invalid PNG data.
-		IMG_LOAD_ERROR_WRONG_SIZE, //!< The images width and height should both be a multiple of 4.
-		IMG_LOAD_ERROR_ALREADY_INIT //!< Returns this if the image was already initialized.
-	};
+namespace wsp {
 
-	//!Specifies how to load the image.
-	enum IMG_LOAD_TYPE{
-		IMG_LOAD_TYPE_PATH = 0, //!< Loads the image from a path on the filesystem.
-		IMG_LOAD_TYPE_BUFFER //!< Loads the image from the provided buffer.
-	};
+    //!Error codes when loading images.
+    enum IMG_LOAD_ERROR {
+        IMG_LOAD_ERROR_NONE = 0, //!< Image successfully loaded.
+        IMG_LOAD_ERROR_NOT_FOUND, //!< File was not found.
+        IMG_LOAD_ERROR_INV_PNG, //!< Invalid PNG header.
+        IMG_LOAD_ERROR_PNG_FAIL, //!< Invalid PNG data.
+        IMG_LOAD_ERROR_WRONG_SIZE, //!< The images width and height should both be a multiple of 4.
+        IMG_LOAD_ERROR_ALREADY_INIT //!< Returns this if the image was already initialized.
+    };
 
-	//!Stores imagedata and is capable of loading pngs.
-	class Image{
-		public:
-			//!Constructor.
-			Image();
-			//!Destructor.
-			virtual ~Image();
+    //!Specifies how to load the image.
+    enum IMG_LOAD_TYPE {
+        IMG_LOAD_TYPE_PATH = 0, //!< Loads the image from a path on the filesystem.
+        IMG_LOAD_TYPE_BUFFER //!< Loads the image from the provided buffer.
+    };
 
-			//!Loads an image from a file. Width and height have to be a multiple of 4, or it won't load.
-			//!Once an Image is initialized, it can't be initialized again.
-			//!Uses fopen(), so some basic filesystem initialization is required.
-			//!\param path The path to the file.
-			//!\param loadtype Set this to how you want to load this image. (This is probably a path)
-			//!\return An error code based on loading status.
-			//!\sa \ref image_loadbuffer_page
-			IMG_LOAD_ERROR LoadImage(const char* path, IMG_LOAD_TYPE loadtype = IMG_LOAD_TYPE_PATH);
-			//!\overload
-			//!\param path The path to the file. (This is probably a buffer)
-			//!\param loadtype Set this to how you want to load this image.
-			//!\sa \ref image_loadbuffer_page
-			IMG_LOAD_ERROR LoadImage(const unsigned char* path, IMG_LOAD_TYPE loadtype = IMG_LOAD_TYPE_BUFFER);
-			
-			//!Cleans up the image to be able to reload it again.
-			void DestroyImage();
-			//!Gets the width of this image.
-			//!\return The width of the image. Returns 0 if no image is loaded.
-			u32 GetWidth() const;
-			//!Gets the height of this image.
-			//!\return The height of the image. Returns 0 if no image is loaded.
-			u32 GetHeight() const;
-	
-			//!Checks if the image is loaded.
-			//!\return true if an image is stored, false if not.
-			bool IsInitialized() const;
+    //!Stores imagedata and is capable of loading pngs.
+    class Image {
+    public:
+        //!Constructor.
+        Image();
 
-			//!Used to select this image for the next texturing process.
-			//!Most of the time you won't gonna use this.
-			//!\param bilinear Turns on bilinear filtering.
-			void BindTexture(bool bilinear = true);
-		protected:
-			//!Initializes a clear image to draw on. It will be displayed as an RGBA8 texture, so its format should be ARGB. Don't mess with it if you don't know what you're doing.
-			//!Once an Image is initialized, it can't be initialized again.
-			//!\param width The new width of the image.
-			//!\param height The new height of the image.
-			//!\return True if it was successfully initialized, false if not.
-			bool _InitializeImage(u32 width, u32 height);
-			//!Use this method if you've drawn something in the pixeldata.
-			void _Flush();
+        //!Destructor.
+        virtual ~Image();
 
-			u8* _pixels; //!< Stores the pixeldata of this image. Use carefully.
-		private:
-			void _ConvertTexture(png_byte color_type, png_bytep* row_pointers);
-			
-			u32 _width, _height;
-			bool _initialized;
-			GXTexObj _texObj;
-	};
+        //!Loads an image from a file. Width and height have to be a multiple of 4, or it won't load.
+        //!Once an Image is initialized, it can't be initialized again.
+        //!Uses fopen(), so some basic filesystem initialization is required.
+        //!\param path The path to the file.
+        //!\param loadtype Set this to how you want to load this image. (This is probably a path)
+        //!\return An error code based on loading status.
+        //!\sa \ref image_loadbuffer_page
+        IMG_LOAD_ERROR LoadImage(const char *path, IMG_LOAD_TYPE loadtype = IMG_LOAD_TYPE_PATH);
+
+        //!\overload
+        //!\param path The path to the file. (This is probably a buffer)
+        //!\param loadtype Set this to how you want to load this image.
+        //!\sa \ref image_loadbuffer_page
+        IMG_LOAD_ERROR LoadImage(const unsigned char *path, IMG_LOAD_TYPE loadtype = IMG_LOAD_TYPE_BUFFER);
+
+        //!Cleans up the image to be able to reload it again.
+        void DestroyImage();
+
+        //!Gets the width of this image.
+        //!\return The width of the image. Returns 0 if no image is loaded.
+        u32 GetWidth() const;
+
+        //!Gets the height of this image.
+        //!\return The height of the image. Returns 0 if no image is loaded.
+        u32 GetHeight() const;
+
+        //!Checks if the image is loaded.
+        //!\return true if an image is stored, false if not.
+        bool IsInitialized() const;
+
+        //!Used to select this image for the next texturing process.
+        //!Most of the time you won't gonna use this.
+        //!\param bilinear Turns on bilinear filtering.
+        void BindTexture(bool bilinear = true);
+
+    protected:
+        //!Initializes a clear image to draw on. It will be displayed as an
+        //!RGBA8 texture, so its format should be ARGB. Don't mess with it
+        //!if you don't know what you're doing.
+        //!Once an Image is initialized, it can't be initialized again.
+        //!\param width The new width of the image.
+        //!\param height The new height of the image.
+        //!\return True if it was successfully initialized, false if not.
+        bool _InitializeImage(u32 width, u32 height);
+
+        //!Use this method if you've drawn something in the pixeldata.
+        void _Flush();
+
+        u8 *_pixels; //!< Stores the pixeldata of this image. Use carefully.
+    private:
+        void _ConvertTexture(png_byte color_type, png_bytep *row_pointers);
+
+        u32 _width, _height;
+        bool _initialized;
+        GXTexObj _texObj;
+    };
 };
 
 /*! \page image_loadbuffer_page Image - Loading from buffer
@@ -131,5 +137,3 @@ image.LoadImage(bar);
  * and it should load just fine!
  *
  */
-
-#endif
